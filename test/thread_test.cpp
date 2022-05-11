@@ -95,7 +95,7 @@ TEST(Rosconsole, threadedCalls)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender( appender );
 
   boost::thread_group tg;
@@ -106,7 +106,7 @@ TEST(Rosconsole, threadedCalls)
   }
   tg.join_all();
 
-  ASSERT_EQ(appender->info_.size(), 10ULL);
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 10ULL);
 
   logger->removeAppender(appender);
 }

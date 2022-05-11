@@ -119,224 +119,224 @@ BasicFilter g_filter(true);
 #define DEFINE_COND_TESTS(name, macro_base, level, log4cxx_level) \
   TEST(RosConsole, name##Cond) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_COND(true, "Testing %d %d %d", 1, 2, 3); \
     macro_base##_COND(false, "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##NamedCond) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_COND_NAMED(true, "test", "Testing %d %d %d", 1, 2, 3); \
     macro_base##_COND_NAMED(false, "test", "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamCond) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_COND(true, "Testing " << 1 << " " << 2 << " " << 3); \
     macro_base##_STREAM_COND(false, "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamCondNamed) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_COND_NAMED(true, "test", "Testing " << 1 << " " << 2 << " " << 3); \
     macro_base##_STREAM_COND_NAMED(false, "test", "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   }
 
 #define DEFINE_ONCE_TESTS(name, macro_base, level, log4cxx_level) \
   TEST(RosConsole, name##Once) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_ONCE("Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##NamedOnce) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_ONCE_NAMED("test", "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamOnce) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_ONCE("Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamOnceNamed) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_ONCE_NAMED("test", "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   }
 
 #define DEFINE_THROTTLE_TESTS(name, macro_base, level, log4cxx_level) \
   TEST(RosConsole, name##Throttle) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_THROTTLE(0.5, "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##NamedThrottle) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_THROTTLE_NAMED(0.5, "test", "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamThrottle) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_THROTTLE(0.5, "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamThrottleNamed) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_THROTTLE_NAMED(0.5, "test", "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   }
 
 #define DEFINE_FILTER_TESTS(name, macro_base, level, log4cxx_level) \
   TEST(RosConsole, name##Filter) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_FILTER(&g_filter, "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##NamedFilter) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_FILTER_NAMED(&g_filter, "test", "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamFilter) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_FILTER(&g_filter, "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamFilterNamed) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_FILTER_NAMED(&g_filter, "test", "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   }
 
 #define DEFINE_LEVEL_TESTS(name, macro_base, level, log4cxx_level) \
   TEST(RosConsole, name) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base("Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##Named) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_NAMED("test", "Testing %d %d %d", 1, 2, 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##Stream) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM("Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   TEST(RosConsole, name##StreamNamed) \
   { \
-    TestAppender* appender = new TestAppender; \
+    auto appender = log4cxx::AppenderPtr(new TestAppender); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->addAppender( appender ); \
     macro_base##_STREAM_NAMED("test", "Testing " << 1 << " " << 2 << " " << 3); \
-    ASSERT_EQ((int)appender->info_.size(), 1); \
-    EXPECT_STREQ(appender->info_[0].message_.c_str(), "Testing 1 2 3"); \
-    EXPECT_EQ(appender->info_[0].level_, log4cxx_level); \
-    EXPECT_STREQ(appender->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
+    ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Testing 1 2 3"); \
+    EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx_level); \
+    EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].logger_name_.c_str(), ROSCONSOLE_ROOT_LOGGER_NAME".rosconsole.test"); \
     log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->removeAppender( appender ); \
   } \
   DEFINE_COND_TESTS(name, macro_base, level, log4cxx_level) \
@@ -354,7 +354,7 @@ TEST(RosConsole, loggingLevels)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender( appender );
 
   int pre_count = 0;
@@ -362,209 +362,209 @@ TEST(RosConsole, loggingLevels)
 
   {
     logger->setLevel( log4cxx::Level::getInfo() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG("test");
     ROS_INFO("test");
     ROS_WARN("test");
     ROS_ERROR("test");
     ROS_FATAL("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 4);
 
     logger->setLevel( log4cxx::Level::getWarn() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG("test");
     ROS_INFO("test");
     ROS_WARN("test");
     ROS_ERROR("test");
     ROS_FATAL("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 3);
 
     logger->setLevel( log4cxx::Level::getError() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG("test");
     ROS_INFO("test");
     ROS_WARN("test");
     ROS_ERROR("test");
     ROS_FATAL("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 2);
 
     logger->setLevel( log4cxx::Level::getFatal() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG("test");
     ROS_INFO("test");
     ROS_WARN("test");
     ROS_ERROR("test");
     ROS_FATAL("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 1);
 
     logger->setLevel( log4cxx::Level::getOff() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG("test");
     ROS_INFO("test");
     ROS_WARN("test");
     ROS_ERROR("test");
     ROS_FATAL("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count);
   }
 
   {
     logger->setLevel( log4cxx::Level::getInfo() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM("test");
     ROS_INFO_STREAM("test");
     ROS_WARN_STREAM("test");
     ROS_ERROR_STREAM("test");
     ROS_FATAL_STREAM("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 4);
 
     logger->setLevel( log4cxx::Level::getWarn() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM("test");
     ROS_INFO_STREAM("test");
     ROS_WARN_STREAM("test");
     ROS_ERROR_STREAM("test");
     ROS_FATAL_STREAM("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 3);
 
     logger->setLevel( log4cxx::Level::getError() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM("test");
     ROS_INFO_STREAM("test");
     ROS_WARN_STREAM("test");
     ROS_ERROR_STREAM("test");
     ROS_FATAL_STREAM("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 2);
 
     logger->setLevel( log4cxx::Level::getFatal() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM("test");
     ROS_INFO_STREAM("test");
     ROS_WARN_STREAM("test");
     ROS_ERROR_STREAM("test");
     ROS_FATAL_STREAM("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 1);
 
     logger->setLevel( log4cxx::Level::getOff() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM("test");
     ROS_INFO_STREAM("test");
     ROS_WARN_STREAM("test");
     ROS_ERROR_STREAM("test");
     ROS_FATAL_STREAM("test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count);
   }
 
   {
     logger->setLevel( log4cxx::Level::getInfo() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_NAMED("test_name", "test");
     ROS_INFO_NAMED("test_name", "test");
     ROS_WARN_NAMED("test_name", "test");
     ROS_ERROR_NAMED("test_name", "test");
     ROS_FATAL_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 4);
 
     logger->setLevel( log4cxx::Level::getWarn() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_NAMED("test_name", "test");
     ROS_INFO_NAMED("test_name", "test");
     ROS_WARN_NAMED("test_name", "test");
     ROS_ERROR_NAMED("test_name", "test");
     ROS_FATAL_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 3);
 
     logger->setLevel( log4cxx::Level::getError() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_NAMED("test_name", "test");
     ROS_INFO_NAMED("test_name", "test");
     ROS_WARN_NAMED("test_name", "test");
     ROS_ERROR_NAMED("test_name", "test");
     ROS_FATAL_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 2);
 
     logger->setLevel( log4cxx::Level::getFatal() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_NAMED("test_name", "test");
     ROS_INFO_NAMED("test_name", "test");
     ROS_WARN_NAMED("test_name", "test");
     ROS_ERROR_NAMED("test_name", "test");
     ROS_FATAL_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 1);
 
     logger->setLevel( log4cxx::Level::getOff() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_NAMED("test_name", "test");
     ROS_INFO_NAMED("test_name", "test");
     ROS_WARN_NAMED("test_name", "test");
     ROS_ERROR_NAMED("test_name", "test");
     ROS_FATAL_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count);
   }
 
   {
     logger->setLevel( log4cxx::Level::getInfo() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM_NAMED("test_name", "test");
     ROS_INFO_STREAM_NAMED("test_name", "test");
     ROS_WARN_STREAM_NAMED("test_name", "test");
     ROS_ERROR_STREAM_NAMED("test_name", "test");
     ROS_FATAL_STREAM_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 4);
 
     logger->setLevel( log4cxx::Level::getWarn() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM_NAMED("test_name", "test");
     ROS_INFO_STREAM_NAMED("test_name", "test");
     ROS_WARN_STREAM_NAMED("test_name", "test");
     ROS_ERROR_STREAM_NAMED("test_name", "test");
     ROS_FATAL_STREAM_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 3);
 
     logger->setLevel( log4cxx::Level::getError() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM_NAMED("test_name", "test");
     ROS_INFO_STREAM_NAMED("test_name", "test");
     ROS_WARN_STREAM_NAMED("test_name", "test");
     ROS_ERROR_STREAM_NAMED("test_name", "test");
     ROS_FATAL_STREAM_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 2);
 
     logger->setLevel( log4cxx::Level::getFatal() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM_NAMED("test_name", "test");
     ROS_INFO_STREAM_NAMED("test_name", "test");
     ROS_WARN_STREAM_NAMED("test_name", "test");
     ROS_ERROR_STREAM_NAMED("test_name", "test");
     ROS_FATAL_STREAM_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count + 1);
 
     logger->setLevel( log4cxx::Level::getOff() );
-    pre_count = appender->info_.size();
+    pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     ROS_DEBUG_STREAM_NAMED("test_name", "test");
     ROS_INFO_STREAM_NAMED("test_name", "test");
     ROS_WARN_STREAM_NAMED("test_name", "test");
     ROS_ERROR_STREAM_NAMED("test_name", "test");
     ROS_FATAL_STREAM_NAMED("test_name", "test");
-    post_count = appender->info_.size();
+    post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
     EXPECT_EQ(post_count, pre_count);
   }
 
@@ -575,7 +575,7 @@ TEST(RosConsole, changingLevel)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender( appender );
 
   logger->setLevel( log4cxx::Level::getError() );
@@ -584,7 +584,7 @@ TEST(RosConsole, changingLevel)
     ROS_LOG((ros::console::Level)i, ROSCONSOLE_DEFAULT_NAME, "test");
   }
 
-  EXPECT_EQ((int)appender->info_.size(), 2);
+  EXPECT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 2);
 
   logger->removeAppender( appender );
 
@@ -595,7 +595,7 @@ TEST(RosConsole, changingLoggerLevel)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender( appender );
 
   logger->setLevel(log4cxx::Level::getDebug());
@@ -618,7 +618,7 @@ TEST(RosConsole, changingLoggerLevel)
   ros::console::notifyLoggerLevelsChanged();
   ROS_LOG(ros::console::levels::Fatal, ROSCONSOLE_DEFAULT_NAME, "test");
 
-  EXPECT_EQ((int)appender->info_.size(), 5);
+  EXPECT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 5);
 
   logger->removeAppender( appender );
 
@@ -629,7 +629,7 @@ TEST(RosConsole, longPrintfStyleOutput)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender( appender );
 
   std::stringstream ss;
@@ -640,8 +640,8 @@ TEST(RosConsole, longPrintfStyleOutput)
 
   ROS_INFO("%s", ss.str().c_str());
 
-  ASSERT_EQ((int)appender->info_.size(), 1);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), ss.str().c_str());
+  ASSERT_EQ((int)dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), ss.str().c_str());
 
   logger->removeAppender( appender );
 
@@ -652,7 +652,7 @@ TEST(RosConsole, throwingAppender)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppenderWithThrow* appender = new TestAppenderWithThrow;
+  auto appender = log4cxx::AppenderPtr(new TestAppenderWithThrow);
   logger->addAppender( appender );
 
   try
@@ -677,13 +677,13 @@ TEST(RosConsole, once)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   onceFunc();
   onceFunc();
 
-  EXPECT_EQ(appender->info_.size(), 1ULL);
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
 
   logger->removeAppender(appender);
 }
@@ -697,7 +697,7 @@ TEST(RosConsole, throttle)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   ros::Time start = ros::Time::now();
@@ -709,7 +709,7 @@ TEST(RosConsole, throttle)
 
   throttleFunc();
 
-  EXPECT_EQ(appender->info_.size(), 2ULL);
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 2ULL);
 
   logger->removeAppender(appender);
 }
@@ -728,7 +728,7 @@ TEST(RosConsole, delayedThrottle)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   ros::Time start = ros::Time::now();
@@ -738,9 +738,9 @@ TEST(RosConsole, delayedThrottle)
     ros::Duration(0.01).sleep();
   }
 
-  EXPECT_EQ(appender->info_.size(), 0ULL);
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 0ULL);
 
-  const int pre_count = appender->info_.size();
+  const int pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
   start = ros::Time::now();
   while (ros::Time::now() <= start + ros::Duration(0.6))
   {
@@ -748,7 +748,7 @@ TEST(RosConsole, delayedThrottle)
     ros::Duration(0.01).sleep();
   }
 
-  const int post_count = appender->info_.size();
+  const int post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
 
   EXPECT_EQ(post_count, pre_count + 1);
 
@@ -765,13 +765,13 @@ TEST(RosConsole, onceStream)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   onceStreamFunc();
   onceStreamFunc();
 
-  EXPECT_EQ(appender->info_.size(), 1ULL);
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
 
   logger->removeAppender(appender);
 }
@@ -785,7 +785,7 @@ TEST(RosConsole, throttleStream)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   ros::Time start = ros::Time::now();
@@ -797,7 +797,7 @@ TEST(RosConsole, throttleStream)
 
   throttleStreamFunc();
 
-  EXPECT_EQ(appender->info_.size(), 2ULL);
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 2ULL);
 
   logger->removeAppender(appender);
 }
@@ -816,7 +816,7 @@ TEST(RosConsole, delayedStreamThrottle)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   ros::Time start = ros::Time::now();
@@ -826,9 +826,9 @@ TEST(RosConsole, delayedStreamThrottle)
     ros::Duration(0.01).sleep();
   }
 
-  EXPECT_EQ(appender->info_.size(), 0ULL);
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 0ULL);
 
-  const int pre_count = appender->info_.size();
+  const int pre_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
   start = ros::Time::now();
   while (ros::Time::now() <= start + ros::Duration(0.6))
   {
@@ -836,7 +836,7 @@ TEST(RosConsole, delayedStreamThrottle)
     ros::Duration(0.01).sleep();
   }
 
-  const int post_count = appender->info_.size();
+  const int post_count = dynamic_cast<TestAppender*>(&*appender)->info_.size();
 
   EXPECT_EQ(post_count, pre_count + 1);
 
@@ -847,15 +847,15 @@ TEST(RosConsole, basicFilter)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   BasicFilter trueFilter(true), falseFilter(false);
   ROS_LOG_FILTER(&trueFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello");
   ROS_LOG_FILTER(&falseFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello2");
 
-  ASSERT_EQ(appender->info_.size(), 1ULL);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), "Hello");
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Hello");
 
   logger->removeAppender(appender);
 }
@@ -864,15 +864,15 @@ TEST(RosConsole, basicFilterStream)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   BasicFilter trueFilter(true), falseFilter(false);
   ROS_LOG_STREAM_FILTER(&trueFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello");
   ROS_LOG_STREAM_FILTER(&falseFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello2");
 
-  ASSERT_EQ(appender->info_.size(), 1ULL);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), "Hello");
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Hello");
 
   logger->removeAppender(appender);
 }
@@ -900,15 +900,15 @@ TEST(RosConsole, advancedFilter)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   AdvancedFilter trueFilter(true), falseFilter(false);
   ROS_LOG_FILTER(&trueFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello");
   ROS_LOG_FILTER(&falseFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello2");
 
-  ASSERT_EQ(appender->info_.size(), 1ULL);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), "Hello");
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Hello");
   EXPECT_EQ(trueFilter.count_, 1);
   EXPECT_EQ(falseFilter.count_, 1);
 
@@ -919,15 +919,15 @@ TEST(RosConsole, advancedFilterStream)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   AdvancedFilter trueFilter(true), falseFilter(false);
   ROS_LOG_STREAM_FILTER(&trueFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello");
   ROS_LOG_STREAM_FILTER(&falseFilter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello2");
 
-  ASSERT_EQ(appender->info_.size(), 1ULL);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), "Hello");
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "Hello");
   EXPECT_EQ(trueFilter.count_, 1);
   EXPECT_EQ(falseFilter.count_, 1);
 
@@ -949,15 +949,15 @@ TEST(RosConsole, changeFilter)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   ChangeFilter filter;
   ROS_LOG_FILTER(&filter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello");
 
-  ASSERT_EQ(appender->info_.size(), 1ULL);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), "haha");
-  EXPECT_EQ(appender->info_[0].level_, log4cxx::Level::getError());
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "haha");
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx::Level::getError());
 
   logger->removeAppender(appender);
 }
@@ -966,15 +966,15 @@ TEST(RosConsole, changeFilterStream)
 {
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME);
 
-  TestAppender* appender = new TestAppender;
+  auto appender = log4cxx::AppenderPtr(new TestAppender);
   logger->addAppender(appender);
 
   ChangeFilter filter;
   ROS_LOG_STREAM_FILTER(&filter, ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, "Hello");
 
-  ASSERT_EQ(appender->info_.size(), 1ULL);
-  EXPECT_STREQ(appender->info_[0].message_.c_str(), "haha");
-  EXPECT_EQ(appender->info_[0].level_, log4cxx::Level::getError());
+  ASSERT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_.size(), 1ULL);
+  EXPECT_STREQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].message_.c_str(), "haha");
+  EXPECT_EQ(dynamic_cast<TestAppender*>(&*appender)->info_[0].level_, log4cxx::Level::getError());
 
   logger->removeAppender(appender);
 }
@@ -1022,7 +1022,7 @@ TEST(RosConsole, formatter)
     ros::console::g_formatter.init(format_string.c_str());
 
     result = ros::console::g_formatter.getTokenStrings(
-      log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
+      &*log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
       file, function, 0);
 
     boost::regex expr("([0-9]+)\\.([0-9]+)");
@@ -1037,7 +1037,7 @@ TEST(RosConsole, formatter)
     ros::console::g_formatter.init(format_string.c_str());
 
     result = ros::console::g_formatter.getTokenStrings(
-      log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
+      &*log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
       file, function, 0);
 
     boost::regex expr("([0-9]{4}) ([0-9]{2}:[0-9]{2}:[0-9]{2})");
@@ -1052,7 +1052,7 @@ TEST(RosConsole, formatter)
     ros::console::g_formatter.init(format_string.c_str());
 
     result = ros::console::g_formatter.getTokenStrings(
-      log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
+      &*log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
       file, function, 0);
 
     boost::regex expr("([0-9]+)\\.([0-9]+)");
@@ -1067,7 +1067,7 @@ TEST(RosConsole, formatter)
     ros::console::g_formatter.init(format_string.c_str());
 
     result = ros::console::g_formatter.getTokenStrings(
-      log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
+      &*log4cxx::Logger::getLogger(ROSCONSOLE_ROOT_LOGGER_NAME), level, str,
       file, function, 0);
 
     boost::regex expr("([0-9]{4}) ([0-9]{2}:[0-9]{2}:[0-9]{2})");
